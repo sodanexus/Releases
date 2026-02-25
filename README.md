@@ -4,12 +4,6 @@ Outil interne pour générer des landing pages de sortie musicale, prêtes à ê
 
 ---
 
-## Ce que ça fait
-
-Tu remplis un formulaire → tu télécharges un ZIP → tu uploades sur GitHub Pages → ta page est live sur `go.viqmusic.net/[slug]`.
-
----
-
 ## Fonctionnalités
 
 ### Générateur
