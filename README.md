@@ -29,7 +29,6 @@ Internal tool to generate music release landing pages, ready to be uploaded to G
 ### 🌐 Generated Landing Page
 - **Animated particles** floating upward, tinted with the cover's primary color
 - **Entry animation** on the cover (zoom + fade)
-- **Parallax effect** on the cover when scrolling
 - **Hover zoom** effect on the cover
 - **Single column layout** — optimized for mobile, clean on all screen sizes
 - **Dynamic background** — blurred cover in background with dark overlay
