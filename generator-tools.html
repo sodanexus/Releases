@@ -151,7 +151,7 @@
     .platform-list { display: flex; flex-direction: column; gap: .6rem; }
     .platform-row {
       display: grid;
-      grid-template-columns: 28px 110px 1fr 14px;
+      grid-template-columns: 28px 110px 1fr 26px;
       align-items: center;
       gap: .6rem;
     }
@@ -195,6 +195,35 @@
       opacity: 0.3;
       cursor: not-allowed;
     }
+
+    /* ── URL preview eye btn ── */
+    .btn-eye {
+      width: 26px; height: 26px; border-radius: 5px;
+      border: 1px solid var(--border); background: transparent;
+      cursor: pointer; display: grid; place-items: center;
+      color: var(--muted); transition: color .15s, border-color .15s, background .15s;
+      flex-shrink: 0; padding: 0;
+    }
+    .btn-eye:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: var(--surface2); }
+    .btn-eye svg { width: 13px; height: 13px; pointer-events: none; }
+
+
+    /* ── URL preview eye btn ── */
+    .btn-eye {
+      width: 26px; height: 26px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      display: grid; place-items: center;
+      color: var(--muted);
+      transition: color .15s, border-color .15s, background .15s;
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .btn-eye:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: var(--surface2); }
+    .btn-eye svg { width: 13px; height: 13px; pointer-events: none; }
+
 
     /* ── Socials ── */
     .social-list { display: flex; flex-direction: column; gap: .6rem; }
@@ -941,6 +970,13 @@ let generatedHTML = '';
 let generatedSlug = '';
 
 // ── Init platform list ────────────────────────────────────────────────────────
+function openLinkPreview(platformId) {
+  const input = document.getElementById('link-' + platformId);
+  const url = input ? input.value.trim() : '';
+  if (!url || url === '#' || url === '') { alert('Aucun lien renseigné pour cette plateforme.'); return; }
+  window.open(url, '_blank', 'noopener');
+}
+
 function initPlatforms() {
   const list = document.getElementById('platformList');
   PLATFORMS.forEach(p => {
@@ -952,7 +988,11 @@ row.innerHTML = `
   <button class="platform-toggle active" data-id="${p.id}" onclick="togglePlatform('${p.id}', this)" title="Activer/désactiver">✓</button>
   <span class="platform-name">${p.label}</span>
   <input type="url" id="link-${p.id}" placeholder="${placeholder}" oninput="schedulePreview()"/>
-  <div class="url-status" id="status-${p.id}"></div>
+  <button class="btn-eye" onclick="openLinkPreview('${p.id}')" title="Ouvrir le lien">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+    </svg>
+  </button>
 `;
 
     list.appendChild(row);
