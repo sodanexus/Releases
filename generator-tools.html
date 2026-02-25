@@ -415,6 +415,9 @@
     .btn-modal.primary { background: var(--success); color: #000; }
     .btn-modal.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
 
+
+    .view-btn svg { flex-shrink: 0; }
+
     /* ── OG Preview ── */
     .og-preview-wrap {
       padding: 1rem 1.5rem 1.25rem;
@@ -1306,6 +1309,13 @@ function buildHTML(artist, title, type, coverSrc, primary, orb2, darkBg, links, 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{--primary:${primary};--card-bg: rgba(0,0,0,0.92);--text:#f5f0eb;--muted: rgba(245,240,235,0.75);}
     html,body{min-height:100%;font-family:'Inter',sans-serif;background:#000;color:var(--text);overflow-x:hidden;}
+
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
     .bg-cover{position:fixed;inset:0;z-index:0;overflow:hidden;}
     .bg-cover img{width:110%;height:110%;object-fit:cover;position:absolute;top:-5%;left:-5%;
       filter:blur(80px) saturate(130%) brightness(0.85);
@@ -1314,9 +1324,11 @@ function buildHTML(artist, title, type, coverSrc, primary, orb2, darkBg, links, 
     .page{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:2rem 1rem 7rem;}
     .card{width:100%;max-width: 400px;background:var(--card-bg);backdrop-filter:blur(28px) saturate(160%);border:1px solid rgba(255,255,255,0.09);border-radius:20px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.7);animation:fadeUp .65s cubic-bezier(.22,1,.36,1) both;}
     @keyframes fadeUp{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes coverReveal{from{opacity:0;transform:scale(1.08);}to{opacity:1;transform:scale(1);}}
     .cover-wrap{position:relative;aspect-ratio:1/1;overflow:hidden;}
     .cover-wrap img.cover{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s ease;}
     .cover-wrap:hover img.cover{transform:scale(1.05);}
+    .cover-wrap{animation:coverReveal .9s cubic-bezier(.22,1,.36,1) both;}
     .cover-gradient{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 45%,rgba(0,0,0,0.30) 100%);}
     .cover-meta{position:absolute;bottom:1.25rem;left:0;right:0;text-align:center;}
     .cover-meta .artist{
@@ -1368,6 +1380,47 @@ function buildHTML(artist, title, type, coverSrc, primary, orb2, darkBg, links, 
       .socials{gap:.85rem;padding:1.05rem 1.1rem 1.15rem;}
       .social-btn{width:36px;height:36px;}
     }
+
+    /* ── Desktop layout ── */
+    @media (min-width: 600px){
+      .page{
+        flex-direction:row;
+        align-items:center;
+        justify-content:center;
+        gap:3rem;
+        padding:2rem 3rem;
+        min-height:100dvh;
+      }
+      .card{
+        display:grid;
+        grid-template-columns:380px 1fr;
+        max-width:820px;
+        width:100%;
+        border-radius:24px;
+      }
+      .cover-wrap{
+        border-radius:22px 0 0 22px;
+        aspect-ratio:1/1;
+        height:100%;
+      }
+      .cover-meta .artist{font-size:2.2rem;}
+      .right-col{
+        display:flex;
+        flex-direction:column;
+        overflow:hidden;
+      }
+      .links-list{
+        flex:1;
+        overflow-y:auto;
+        padding:.75rem 0 .5rem;
+      }
+      .socials{
+        padding:1rem 1.5rem 1.25rem;
+      }
+      .copy-link-btn{
+        margin:0 auto 1rem;
+      }
+    }
   
     .copy-link-btn{
   margin: 0 auto 1.5rem;
@@ -1412,6 +1465,7 @@ function buildHTML(artist, title, type, coverSrc, primary, orb2, darkBg, links, 
   </style>
 </head>
 <body>
+  <canvas id="particles-canvas"></canvas>
   <div class="bg-cover"><img src="cover.jpg" alt=""><div class="bg-overlay"></div></div>
   <div class="page">
     <div class="card">
@@ -1423,16 +1477,17 @@ function buildHTML(artist, title, type, coverSrc, primary, orb2, darkBg, links, 
           <div class="track">${title} · ${type}</div>
         </div>
       </div>
-      <div class="links-list">
-        <div class="divider"></div>
-        ${linksHTML}
+      <div class="right-col">
+        <div class="links-list">
+          <div class="divider"></div>
+          ${linksHTML}
+        </div>
+        <div class="socials">${socialsHTML}</div>
+        <button class="copy-link-btn" id="copyLinkBtn" onclick="shareOrCopy(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3"/></svg>
+          Share
+        </button>
       </div>
-      <div class="socials">${socialsHTML}</div>
-
-      <button class="copy-link-btn" id="copyLinkBtn" onclick="shareOrCopy(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3"/></svg>
-    Share
-  </button>
     </div>
   </div>
 
@@ -1442,6 +1497,98 @@ function buildHTML(artist, title, type, coverSrc, primary, orb2, darkBg, links, 
   </div>
 
 <script>
+
+// ── Particules ────────────────────────────────────────────────────────────────
+(function(){
+  const canvas = document.getElementById('particles-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // Couleur injectée depuis la cover via CSS variable ou fallback orange
+  function getColor() {
+    const style = getComputedStyle(document.documentElement);
+    const primary = (style.getPropertyValue('--primary') || '').trim();
+    if (primary && primary.startsWith('#') && primary.length >= 7) {
+      const r = parseInt(primary.slice(1,3),16);
+      const g = parseInt(primary.slice(3,5),16);
+      const b = parseInt(primary.slice(5,7),16);
+      if (!isNaN(r)) return [r,g,b];
+    }
+    return [255, 107, 26];
+  }
+
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function createParticle(fromBottom) {
+    return {
+      x: Math.random() * W,
+      y: fromBottom ? H + Math.random() * 20 : Math.random() * H,
+      r: Math.random() * 1.2 + 0.3,
+      dx: (Math.random() - 0.5) * 0.4,
+      dy: -(Math.random() * 0.5 + 0.15),
+      alpha: Math.random() * 0.55 + 0.25,
+      life: 0,
+      maxLife: Math.random() * 280 + 180,
+      offset: Math.random() * 100,
+    };
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({ length: 60 }, () => {
+      const p = createParticle(false);
+      p.life = Math.random() * p.maxLife;
+      return p;
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const [r, g, b] = getColor();
+
+    particles.forEach((p, i) => {
+      const progress = p.life / p.maxLife;
+      let opacity;
+      if (progress < 0.12) {
+        opacity = (progress / 0.12) * p.alpha;
+      } else if (progress > 0.78) {
+        opacity = ((1 - progress) / 0.22) * p.alpha;
+      } else {
+        opacity = p.alpha;
+      }
+
+      const wobble = Math.sin(p.life * 0.02 + p.offset) * 0.45;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + Math.min(opacity, 1).toFixed(3) + ')';
+      ctx.shadowColor = 'rgba(' + r + ',' + g + ',' + b + ',' + Math.min(opacity * 0.8, 1).toFixed(3) + ')';
+      ctx.shadowBlur = p.r * 6;
+      ctx.fill();
+      ctx.restore();
+
+      p.x += p.dx + wobble;
+      p.y += p.dy;
+      p.life++;
+
+      if (p.life >= p.maxLife || p.y < -10) {
+        particles[i] = createParticle(true);
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  init();
+  draw();
+})();
 async function shareOrCopy(btn){
   const shareData = {
     title: document.title || 'Listen now',
@@ -1562,9 +1709,13 @@ async function updatePreviewLive(){
 
   const frame = document.getElementById('previewFrame');
   frame.srcdoc = previewHTML;
+
   document.getElementById('previewEmpty').style.display = 'none';
   document.getElementById('phoneMockup').style.display = 'block';
   updatePhoneScale();
+
+  // OG preview en live
+  updateOGPreview(artist, title, type, coverSrc || null, primary);
 }
 async function generate() {
   const artist = document.getElementById('artist').value.trim() || 'VIQ';
@@ -1764,100 +1915,119 @@ async function generateOGImage(artist, title, type, coverSrc, primaryColor) {
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
 
+    // Parse primary color to RGB
+    function hexToRgb(hex) {
+      const r = parseInt(hex.slice(1,3),16);
+      const g = parseInt(hex.slice(3,5),16);
+      const b = parseInt(hex.slice(5,7),16);
+      return [r,g,b];
+    }
+    const [pr, pg, pb] = hexToRgb(primaryColor || '#ff6b1a');
+
     function drawFinal(coverImg) {
-      // Background: cover blurred
+      // ── Background : cover full blurred ──────────────────────────────────
       if (coverImg) {
         ctx.save();
-        ctx.filter = 'blur(40px) saturate(140%) brightness(0.55)';
-        ctx.drawImage(coverImg, -80, -80, W + 160, H + 160);
+        ctx.filter = 'blur(55px) saturate(160%) brightness(0.45)';
+        ctx.drawImage(coverImg, -100, -100, W + 200, H + 200);
         ctx.filter = 'none';
         ctx.restore();
       } else {
-        const grad = ctx.createLinearGradient(0, 0, W, H);
-        grad.addColorStop(0, '#0a0500');
-        grad.addColorStop(1, '#1a0a00');
-        ctx.fillStyle = grad;
+        ctx.fillStyle = '#080808';
         ctx.fillRect(0, 0, W, H);
       }
 
-      // Dark overlay
-      ctx.fillStyle = 'rgba(0,0,0,0.50)';
+      // Overlay gradient gauche (zone texte plus lisible)
+      const overlayGrad = ctx.createLinearGradient(0, 0, W, 0);
+      overlayGrad.addColorStop(0, 'rgba(0,0,0,0.82)');
+      overlayGrad.addColorStop(0.55, 'rgba(0,0,0,0.60)');
+      overlayGrad.addColorStop(1, 'rgba(0,0,0,0.15)');
+      ctx.fillStyle = overlayGrad;
       ctx.fillRect(0, 0, W, H);
 
-      // Left: cover art square
-      const coverSize = 420;
-      const coverX = 80;
+      // ── Cover à droite ────────────────────────────────────────────────────
+      const coverSize = 480;
+      const coverX = W - coverSize - 60;
       const coverY = (H - coverSize) / 2;
 
       if (coverImg) {
+        // Cover plein bord droit, carré centré verticalement
+        const coverX2 = W - H; // carré = hauteur de l'image
         ctx.save();
-        roundRect(ctx, coverX, coverY, coverSize, coverSize, 20);
+        ctx.beginPath();
+        ctx.rect(coverX2, 0, H, H);
         ctx.clip();
-        ctx.drawImage(coverImg, coverX, coverY, coverSize, coverSize);
+        ctx.drawImage(coverImg, coverX2, 0, H, H);
         ctx.restore();
-        ctx.save();
-        roundRect(ctx, coverX, coverY, coverSize, coverSize, 20);
-        ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.restore();
+
+        // Dégradé fondu sur le bord gauche de la cover
+        const coverFade = ctx.createLinearGradient(coverX2, 0, coverX2 + 120, 0);
+        coverFade.addColorStop(0, 'rgba(0,0,0,0.75)');
+        coverFade.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = coverFade;
+        ctx.fillRect(coverX2, 0, 120, H);
       }
 
-      // Right text area
-      const textX = coverX + coverSize + 72;
-      const textMaxW = W - textX - 60;
-      const centerY = H / 2;
+      // ── Zone texte (gauche) ───────────────────────────────────────────────
+      const textX = 80;
+      const textMaxW = coverX - textX - 60;
+      const startY = H / 2 - 80;
 
-      // Type badge
-      const badgeText = type.toUpperCase();
-      ctx.font = 'bold 12px Inter, Arial, sans-serif';
-      const badgeW = ctx.measureText(badgeText).width + 32;
-      const badgeH = 28;
-      const badgeY = centerY - 108;
+      // Ligne déco en couleur primaire
       ctx.fillStyle = primaryColor;
-      ctx.globalAlpha = 0.92;
-      roundRect(ctx, textX, badgeY, badgeW, badgeH, 6);
-      ctx.fill();
+      ctx.globalAlpha = 0.9;
+      ctx.fillRect(textX, startY, 40, 3);
       ctx.globalAlpha = 1;
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 11px Inter, Arial, sans-serif';
-      ctx.fillText(badgeText, textX + 16, badgeY + 18);
 
-      // Artist name
+      // Type (lettres espacées, petit, au dessus du nom)
+      ctx.fillStyle = 'rgba(255,255,255,0.50)';
+      ctx.font = '500 13px Inter, Arial, sans-serif';
+      ctx.letterSpacing = '0.2em';
+      ctx.fillText(type.toUpperCase(), textX, startY + 32);
+      ctx.letterSpacing = '0';
+
+      // Nom artiste — grand, serif
       ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = 'rgba(0,0,0,0.9)';
-      ctx.shadowBlur = 24;
-      let aSize = 66;
-      ctx.font = `bold ${aSize}px Georgia, serif`;
-      while (ctx.measureText(artist).width > textMaxW && aSize > 28) {
+      ctx.shadowColor = 'rgba(0,0,0,0.8)';
+      ctx.shadowBlur = 20;
+      let aSize = 88;
+      ctx.font = 'bold ' + aSize + 'px Georgia, serif';
+      while (ctx.measureText(artist).width > textMaxW && aSize > 32) {
         aSize -= 3;
-        ctx.font = `bold ${aSize}px Georgia, serif`;
+        ctx.font = 'bold ' + aSize + 'px Georgia, serif';
       }
-      ctx.fillText(artist, textX, centerY - 18);
-
-      // Title
+      ctx.fillText(artist, textX, startY + 32 + aSize + 10);
       ctx.shadowBlur = 0;
-      ctx.fillStyle = 'rgba(255,255,255,0.72)';
-      let tSize = 30;
-      ctx.font = `300 ${tSize}px Inter, Arial, sans-serif`;
-      while (ctx.measureText(title).width > textMaxW && tSize > 14) {
+
+      // Titre chanson
+      ctx.fillStyle = 'rgba(255,255,255,0.65)';
+      let tSize = 34;
+      ctx.font = '300 ' + tSize + 'px Inter, Arial, sans-serif';
+      while (ctx.measureText(title).width > textMaxW && tSize > 16) {
         tSize -= 2;
-        ctx.font = `300 ${tSize}px Inter, Arial, sans-serif`;
+        ctx.font = '300 ' + tSize + 'px Inter, Arial, sans-serif';
       }
-      ctx.fillText(title, textX, centerY + 32);
+      ctx.fillText(title, textX, startY + 32 + aSize + 10 + tSize + 18);
 
-      // Tagline
-      ctx.fillStyle = 'rgba(255,255,255,0.38)';
-      ctx.font = '13px Inter, Arial, sans-serif';
-      ctx.fillText('LISTEN ON ALL PLATFORMS', textX, centerY + 78);
+      // Tagline minimaliste
+      ctx.fillStyle = 'rgba(255,255,255,0.28)';
+      ctx.font = '11px Inter, Arial, sans-serif';
+      ctx.fillText('STREAM NOW · ALL PLATFORMS', textX, H - 44);
 
-      // Bottom accent bar
-      ctx.fillStyle = primaryColor;
-      ctx.globalAlpha = 0.85;
-      ctx.fillRect(0, H - 5, W, 5);
+      // Domaine en bas à gauche
+      ctx.fillStyle = 'rgba(255,255,255,0.18)';
+      ctx.font = '500 12px Inter, Arial, sans-serif';
+      ctx.fillText('viqmusic.net', textX, H - 24);
+
+      // ── Barre couleur primaire en bas ─────────────────────────────────────
+      const barGrad = ctx.createLinearGradient(0, 0, W, 0);
+      barGrad.addColorStop(0, primaryColor);
+      barGrad.addColorStop(1, 'rgba(' + pr + ',' + pg + ',' + pb + ',0.2)');
+      ctx.fillStyle = barGrad;
       ctx.globalAlpha = 1;
+      ctx.fillRect(0, H - 4, W, 4);
 
-      resolve(canvas.toDataURL('image/jpeg', 0.88));
+      resolve(canvas.toDataURL('image/jpeg', 0.92));
     }
 
     if (coverSrc) {
@@ -1986,7 +2156,9 @@ async function autofillLinks() {
   status.textContent = 'Interrogation de l\'API Odesli…';
 
   try {
-    const apiUrl = `https://api.song.link/v1-alpha.1/links?url=${encodeURIComponent(url)}&userCountry=FR`;
+    const proxyBase = 'https://corsproxy.io/?url=';
+    const targetUrl = 'https://api.song.link/v1-alpha.1/links?url=' + encodeURIComponent(url) + '&userCountry=FR';
+    const apiUrl = proxyBase + encodeURIComponent(targetUrl);
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`API error ${res.status}`);
     const data = await res.json();
@@ -2055,6 +2227,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const inp = document.getElementById('autofillInput');
   if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') autofillLinks(); });
 });
+
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 initPlatforms();
