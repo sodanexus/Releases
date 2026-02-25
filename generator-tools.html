@@ -215,6 +215,47 @@
     .social-row input:focus { border-color: var(--accent); }
 
     /* ── Generate button ── */
+    .post-block {
+      position: relative;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .75rem;
+    }
+    .post-platform-label {
+      font-size: .65rem;
+      font-family: var(--mono);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .5rem;
+    }
+    .post-textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: .78rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+    }
+    .post-copy-btn {
+      margin-top: .5rem;
+      padding: .35rem .8rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .7rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .post-copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .post-copy-btn.copied { border-color: var(--success); color: var(--success); }
+
     .btn-generate {
       width: 100%;
       padding: 1rem;
@@ -718,6 +759,18 @@
     </div>
       <div id="coverOptStatus" style="margin-top:.65rem;font-size:.72rem;font-family:var(--mono);color:var(--muted);text-align:center;display:none;"></div>
 
+      <div id="colorPickerWrap" style="display:none;margin-top:1rem;">
+        <div style="font-size:.72rem;font-family:var(--mono);color:var(--muted);margin-bottom:.5rem;letter-spacing:.05em;">COULEUR PRIMAIRE EXTRAITE</div>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <input type="color" id="primaryColorPicker" style="width:44px;height:44px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0;" oninput="onColorPickerChange(this.value)"/>
+          <div style="flex:1;">
+            <div id="primaryColorHex" style="font-size:.8rem;font-family:var(--mono);color:var(--text);"></div>
+            <div style="font-size:.7rem;font-family:var(--mono);color:var(--muted);margin-top:.15rem;">Modifie pour changer l'ambiance</div>
+          </div>
+          <button onclick="resetPrimaryColor()" style="padding:.4rem .7rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:.7rem;font-family:var(--mono);cursor:pointer;">↺ Reset</button>
+        </div>
+      </div>
+
 
     <!-- Auto-remplissage Odesli -->
     <div class="section">
@@ -783,6 +836,26 @@
   </div>
 </div>
 
+    <!-- Posts generator -->
+    <div class="section" id="postsSection">
+      <div class="section-title">Promo posts</div>
+      <div style="display:flex;flex-direction:column;gap:.75rem;" id="postsList">
+
+<div class="post-block">
+          <div class="post-platform-label">TikTok</div>
+          <textarea class="post-textarea" id="post-tiktok" rows="3" spellcheck="false"></textarea>
+          <button class="post-copy-btn" onclick="copyPost('tiktok', this)">Copy</button>
+        </div>
+
+        <div class="post-block">
+          <div class="post-platform-label">Facebook / Instagram</div>
+          <textarea class="post-textarea" id="post-facebook" rows="5" spellcheck="false"></textarea>
+          <button class="post-copy-btn" onclick="copyPost('facebook', this)">Copy</button>
+        </div>
+
+      </div>
+    </div>
+
     <button class="btn-generate" onclick="generate()">⚡ Générer la landing page</button>
   </div>
 
@@ -799,10 +872,18 @@
         <span class="big">📱</span>
         L'aperçu apparaît<br/>après génération
       </div>
+      <div id="btnFullscreenWrap" style="display:none;text-align:center;margin-bottom:.75rem;">
+        <button id="btnFullscreen" onclick="toggleFullscreen()" style="padding:.45rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:.75rem;font-family:var(--mono);cursor:pointer;transition:all .2s;">⛶ Plein écran</button>
+      </div>
       <div class="phone-mockup" id="phoneMockup" style="display:none;">
         <div class="phone-notch"></div>
         <iframe id="previewFrame" title="Preview"></iframe>
       </div>
+    </div>
+    <!-- Fullscreen overlay -->
+    <div id="fullscreenOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:#000;">
+      <iframe id="fullscreenFrame" style="width:100%;height:100%;border:none;"></iframe>
+      <button onclick="closeFullscreen()" style="position:fixed;top:1rem;right:1rem;padding:.5rem 1rem;background:rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:white;font-family:var(--mono);font-size:.8rem;cursor:pointer;z-index:10000;">✕ Fermer</button>
     </div>
     <!-- OG image preview -->
     <div class="og-preview-wrap">
@@ -880,6 +961,7 @@ let previewTimer = null;
 function schedulePreview(){
   clearTimeout(previewTimer);
   previewTimer = setTimeout(updatePreviewLive, 120);
+  generatePosts();
 }
 
 // ── Phone preview scaling (auto center + auto scale) ───────────────────────────
@@ -1059,6 +1141,14 @@ async function handleCover(e) {
 
     schedulePreview();
   }
+
+  // Extraire et afficher la couleur primaire
+  if (coverDataURL) {
+    try {
+      const extracted = await extractColor(coverDataURL);
+      showColorPicker(extracted);
+    } catch(_) {}
+  }
 }
 
 
@@ -1068,6 +1158,11 @@ function triggerCoverChange(){
 }
 
 function removeCover(){
+  // Reset color picker
+  const wrap = document.getElementById('colorPickerWrap');
+  if (wrap) wrap.style.display = 'none';
+  extractedPrimaryColor = null;
+  manualPrimaryColor = null;
   coverFile = null;
   coverDataURL = null;
   const input = document.getElementById('coverInput');
@@ -1508,7 +1603,7 @@ function buildHTML(artist, title, type, coverSrc, primary, orb2, darkBg, links, 
     return {
       x: Math.random() * W,
       y: fromBottom ? H + Math.random() * 20 : Math.random() * H,
-      r: Math.random() * 1.2 + 0.3,
+      r: Math.random() * 1.6 + 0.5,
       dx: (Math.random() - 0.5) * 0.4,
       dy: -(Math.random() * 1.2 + 0.6),
       alpha: Math.random() * 0.55 + 0.25,
@@ -1622,6 +1717,30 @@ async function shareOrCopy(btn){
     btn.innerHTML = original;
   }, 2000);
 }
+
+// ── Parallax cover ────────────────────────────────────────────────────────────
+(function(){
+  const coverWrap = document.querySelector('.cover-wrap');
+  const coverImg  = document.querySelector('.cover-wrap img.cover');
+  if (!coverWrap || !coverImg) return;
+
+  // Setup : on agrandit légèrement la cover pour avoir de la marge
+  coverImg.style.transform = 'scale(1.12)';
+  coverImg.style.transition = 'transform .1s linear';
+  coverImg.style.transformOrigin = 'center center';
+
+  function onScroll() {
+    const rect  = coverWrap.getBoundingClientRect();
+    const winH  = window.innerHeight;
+    // progress : 0 quand le bas de la cover est en haut, 1 quand le haut est en bas
+    const progress = 1 - (rect.bottom / (winH + rect.height));
+    const offset   = (progress - 0.5) * 40; // ±20px
+    coverImg.style.transform = 'scale(1.12) translateY(' + offset.toFixed(1) + 'px)';
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
 <\/script>
 </body>
 </html>`;
@@ -1660,7 +1779,14 @@ async function updatePreviewLive(){
 
   let primary = '#ff6b1a';
   if (coverSrc){
-    try { primary = await extractColor(coverSrc); } catch(_) {}
+    try {
+      const extracted = await extractColor(coverSrc);
+      primary = getActivePrimaryColor(extracted);
+    } catch(_) {
+      primary = getActivePrimaryColor(null);
+    }
+  } else {
+    primary = getActivePrimaryColor(null);
   }
   const orb2   = shiftHue(primary, -35);
   const darkBg = darken(primary, 0.08);
@@ -1712,7 +1838,10 @@ async function generate() {
   // Color extraction
   let primary = '#ff6b1a';
   if (coverSrc) {
-    primary = await extractColor(coverSrc);
+    const extracted = await extractColor(coverSrc);
+    primary = getActivePrimaryColor(extracted);
+  } else {
+    primary = getActivePrimaryColor(null);
   }
   const orb2   = shiftHue(primary, -35);
   const darkBg = darken(primary, 0.08);
@@ -1754,13 +1883,13 @@ async function generate() {
   document.getElementById('phoneMockup').style.display = 'block';
   updatePhoneScale();
   document.getElementById('btnDownload').classList.add('visible');
+  document.getElementById('btnFullscreenWrap').style.display = 'block';
 
   // Generate + show OG preview
   updateOGPreview(artist, title, type, coverSrc, primary);
 
-  // Modal
-  document.getElementById('modalUrl').textContent = `sodanexus.github.io/releases/${slug}`;
-  document.getElementById('modalOverlay').classList.add('open');
+  // Direct download
+  downloadZip();
 }
 
 function fileToDataURL(file) {
@@ -2226,6 +2355,110 @@ async function autofillLinks() {
     btnContent.textContent = '⚡ Remplir';
   }
 }
+
+// ── Promo posts ──────────────────────────────────────────────────────────────
+function generatePosts() {
+  const artist = (document.getElementById('artist').value || 'VIQ').trim();
+  const title  = (document.getElementById('title').value || '').trim();
+  const slug   = (document.getElementById('slug').value || '').trim();
+  const type   = (document.getElementById('type').value || 'single').toLowerCase();
+  const url    = slug ? 'https://go.viqmusic.net/' + slug : 'go.viqmusic.net/...';
+
+  if (!title) return;
+
+  const posts = {
+    tiktok:   `"${title}" out now 🔥 ${url}`,
+    facebook: `My new ${type} "${title}" is out now!\nListen now on Spotify, Apple Music and all streaming platforms.\n\nListen here : ${url}`,
+  };
+
+  for (const [platform, text] of Object.entries(posts)) {
+    const el = document.getElementById('post-' + platform);
+    if (el && !el.dataset.edited) el.value = text;
+  }
+}
+
+async function copyPost(platform, btn) {
+  const el = document.getElementById('post-' + platform);
+  if (!el || !el.value) return;
+  try {
+    await navigator.clipboard.writeText(el.value);
+  } catch(_) {
+    const ta = document.createElement('textarea');
+    ta.value = el.value;
+    ta.style.position = 'fixed'; ta.style.top = '-1000px';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+  const orig = btn.textContent;
+  btn.textContent = '✓ Copied!';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+}
+
+// Marquer comme édité manuellement pour ne pas écraser
+['tiktok','facebook'].forEach(p => {
+  const el = document.getElementById('post-' + p);
+  if (el) el.addEventListener('input', () => { el.dataset.edited = '1'; });
+});
+
+// ── Color picker ─────────────────────────────────────────────────────────────
+let extractedPrimaryColor = null;
+let manualPrimaryColor = null;
+
+function showColorPicker(hex) {
+  extractedPrimaryColor = hex;
+  manualPrimaryColor = null;
+  const wrap = document.getElementById('colorPickerWrap');
+  const picker = document.getElementById('primaryColorPicker');
+  const hexLabel = document.getElementById('primaryColorHex');
+  if (!wrap || !picker) return;
+  picker.value = hex;
+  hexLabel.textContent = hex.toUpperCase();
+  wrap.style.display = 'block';
+}
+
+function onColorPickerChange(hex) {
+  manualPrimaryColor = hex;
+  const hexLabel = document.getElementById('primaryColorHex');
+  if (hexLabel) hexLabel.textContent = hex.toUpperCase();
+  schedulePreview();
+}
+
+function resetPrimaryColor() {
+  manualPrimaryColor = null;
+  if (extractedPrimaryColor) {
+    const picker = document.getElementById('primaryColorPicker');
+    const hexLabel = document.getElementById('primaryColorHex');
+    if (picker) picker.value = extractedPrimaryColor;
+    if (hexLabel) hexLabel.textContent = extractedPrimaryColor.toUpperCase();
+    schedulePreview();
+  }
+}
+
+function getActivePrimaryColor(extracted) {
+  return manualPrimaryColor || extracted || '#ff6b1a';
+}
+
+// ── Plein écran ──────────────────────────────────────────────────────────────
+function toggleFullscreen() {
+  const overlay = document.getElementById('fullscreenOverlay');
+  const frame = document.getElementById('fullscreenFrame');
+  const previewFrame = document.getElementById('previewFrame');
+  frame.srcdoc = previewFrame.srcdoc;
+  overlay.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFullscreen() {
+  document.getElementById('fullscreenOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Fermer avec Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeFullscreen();
+});
 
 // ── URL finale ───────────────────────────────────────────────────────────────
 function updateFinalUrl() {
