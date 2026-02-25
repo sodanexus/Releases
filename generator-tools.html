@@ -1718,29 +1718,6 @@ async function shareOrCopy(btn){
   }, 2000);
 }
 
-// ── Parallax cover ────────────────────────────────────────────────────────────
-(function(){
-  const coverWrap = document.querySelector('.cover-wrap');
-  const coverImg  = document.querySelector('.cover-wrap img.cover');
-  if (!coverWrap || !coverImg) return;
-
-  // Setup : on agrandit légèrement la cover pour avoir de la marge
-  coverImg.style.transform = 'scale(1.12)';
-  coverImg.style.transition = 'transform .1s linear';
-  coverImg.style.transformOrigin = 'center center';
-
-  function onScroll() {
-    const rect  = coverWrap.getBoundingClientRect();
-    const winH  = window.innerHeight;
-    // progress : 0 quand le bas de la cover est en haut, 1 quand le haut est en bas
-    const progress = 1 - (rect.bottom / (winH + rect.height));
-    const offset   = (progress - 0.5) * 40; // ±20px
-    coverImg.style.transform = 'scale(1.12) translateY(' + offset.toFixed(1) + 'px)';
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-})();
 <\/script>
 </body>
 </html>`;
