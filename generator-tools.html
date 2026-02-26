@@ -791,8 +791,8 @@
         <div style="font-size:.72rem;font-family:var(--mono);color:var(--muted);margin-bottom:.5rem;letter-spacing:.05em;">DÉGRADÉ COVER</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;">
           <button class="gradient-btn" onclick="onGradientChange(35, this)">Léger</button>
-          <button class="gradient-btn" onclick="onGradientChange(55, this)">Moyen</button>
-          <button class="gradient-btn active" onclick="onGradientChange(80, this)">Fort</button>
+          <button class="gradient-btn active" onclick="onGradientChange(55, this)">Moyen</button>
+          <button class="gradient-btn" onclick="onGradientChange(80, this)">Fort</button>
         </div>
       </div>
 
@@ -856,16 +856,13 @@
   <div class="panel-preview">
     <div class="preview-header">
       <span>Aperçu live</span>
-      <button class="btn-download" id="btnDownload" onclick="downloadZip()">↓ Télécharger le dossier</button>
+      <button id="btnFullscreen" onclick="toggleFullscreen()" style="padding:.35rem .8rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:.72rem;font-family:var(--mono);cursor:pointer;transition:all .2s;">⛶ Plein écran</button>
       <a href="https://github.com/sodanexus/releases/upload/main" target="_blank" rel="noopener" id="btnGithub" class="btn-github">↗ GitHub</a>
     </div>
     <div class="preview-frame-wrap">
       <div id="previewEmpty" class="preview-empty">
         <span class="big">📱</span>
         L'aperçu apparaît<br/>après génération
-      </div>
-      <div id="btnFullscreenWrap" style="display:none;text-align:center;margin-bottom:.75rem;">
-        <button id="btnFullscreen" onclick="toggleFullscreen()" style="padding:.45rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:.75rem;font-family:var(--mono);cursor:pointer;transition:all .2s;">⛶ Plein écran</button>
       </div>
       <div class="phone-mockup" id="phoneMockup" style="display:none;">
         <div class="phone-notch"></div>
@@ -1921,9 +1918,7 @@ async function buildLanding() {
   document.getElementById('previewEmpty').style.display = 'none';
   document.getElementById('phoneMockup').style.display = 'block';
   updatePhoneScale();
-  document.getElementById('btnDownload').classList.add('visible');
   document.getElementById('btnGithub').style.display = 'block';
-  document.getElementById('btnFullscreenWrap').style.display = 'block';
 
   // Generate + show OG preview
   updateOGPreview(artist, title, type, coverSrc, primary);
@@ -2431,7 +2426,7 @@ async function copyHTML(btn) {
 }
 
 // ── Gradient slider ──────────────────────────────────────────────────────────
-let gradientOpacity = 0.80;
+let gradientOpacity = 0.55;
 
 function onGradientChange(val, btn) {
   gradientOpacity = val / 100;
@@ -2485,7 +2480,9 @@ function getActivePrimaryColor(extracted) {
 }
 
 // ── Plein écran ──────────────────────────────────────────────────────────────
-function toggleFullscreen() {
+async function toggleFullscreen() {
+  if (!generatedHTML) await buildLanding();
+  if (!generatedHTML) return;
   const overlay = document.getElementById('fullscreenOverlay');
   const frame = document.getElementById('fullscreenFrame');
   const previewFrame = document.getElementById('previewFrame');
