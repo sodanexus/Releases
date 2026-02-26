@@ -17,7 +17,6 @@ Internal tool to generate music release landing pages, ready to be uploaded to G
 - **Full-screen preview** — button to view the landing page full-screen without the phone mockup
 - **Auto slug** — generated from the song title, customizable
 - **Final URL display** — `go.viqmusic.net/[slug]` shown with a one-click copy button
-- **URL validation** — green/red visual indicator for each link
 - **URL cleaning** — automatic removal of tracking parameters (utm, etc.) on blur
 - **Config duplication** — clone a page while keeping artist + social links, clearing title + release links
 - **ZIP export** — direct download on generate, no dialog. Generates a `[slug]/` folder containing `index.html`, `cover.jpg`, and `og.jpg`
