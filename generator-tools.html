@@ -196,38 +196,9 @@
       cursor: not-allowed;
     }
 
-    /* ── URL preview eye btn ── */
-    .btn-eye {
-      width: 26px; height: 26px; border-radius: 5px;
-      border: 1px solid var(--border); background: transparent;
-      cursor: pointer; display: grid; place-items: center;
-      color: var(--muted); transition: color .15s, border-color .15s, background .15s;
-      flex-shrink: 0; padding: 0;
-    }
-    .btn-eye:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: var(--surface2); }
-    .btn-eye svg { width: 13px; height: 13px; pointer-events: none; }
-
-
-    /* ── URL preview eye btn ── */
-    .btn-eye {
-      width: 26px; height: 26px;
-      border-radius: 5px;
-      border: 1px solid var(--border);
-      background: transparent;
-      cursor: pointer;
-      display: grid; place-items: center;
-      color: var(--muted);
-      transition: color .15s, border-color .15s, background .15s;
-      flex-shrink: 0;
-      padding: 0;
-    }
-    .btn-eye:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: var(--surface2); }
-    .btn-eye svg { width: 13px; height: 13px; pointer-events: none; }
-
-
     /* ── Socials ── */
     .social-list { display: flex; flex-direction: column; gap: .6rem; }
-    .social-row { display: grid; grid-template-columns: 100px 1fr; gap: .6rem; align-items: center; }
+    .social-row { display: grid; grid-template-columns: 28px 100px 1fr; gap: .6rem; align-items: center; }
     .social-label { font-size: .78rem; font-family: var(--mono); color: var(--muted); }
     .social-row input {
       background: var(--surface2);
@@ -624,6 +595,18 @@
   
 .cover-zone.dragover{border-color:var(--accent);background:rgba(255,107,26,0.05);}
 
+    /* ── Import landing page ── */
+    .import-zone { border: 2px dashed var(--border); border-radius: 10px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: .9rem; cursor: pointer; position: relative; transition: border-color .2s, background .2s; margin-bottom: 2.5rem; }
+    .import-zone:hover { border-color: var(--accent); background: rgba(255,107,26,0.04); }
+    .import-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+    .import-zone .import-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .import-zone .import-text { font-size: .78rem; font-family: var(--mono); color: var(--muted); line-height: 1.5; }
+    .import-zone .import-text strong { color: var(--text); display: block; margin-bottom: .1rem; font-family: 'Syne', sans-serif; font-size: .82rem; }
+    /* ── URL open btn ── */
+    .btn-eye { width: 26px; height: 26px; border-radius: 5px; border: 1px solid var(--border); background: transparent; cursor: pointer; display: grid; place-items: center; color: var(--muted); transition: color .15s, border-color .15s, background .15s; flex-shrink: 0; padding: 0; }
+    .btn-eye:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: var(--surface2); }
+    .btn-eye svg { width: 13px; height: 13px; pointer-events: none; }
+
     /* ── Autofill Odesli ── */
     .autofill-wrap {
       display: flex;
@@ -695,6 +678,16 @@
     <div class="logo">VIQ Music · Release Tool</div>
     <h1>Nouvelle<br/><span>landing page</span></h1>
     <p class="subtitle">Remplis le formulaire → télécharge le dossier</p>
+
+    <!-- Import existing landing page -->
+    <div class="import-zone" id="importZone">
+      <input type="file" id="importInput" accept=".html" onchange="importLandingPage(event)"/>
+      <div class="import-icon">📂</div>
+      <div class="import-text">
+        <strong>Importer une landing page</strong>
+        Glisse un index.html généré pour le modifier
+      </div>
+    </div>
 
     <!-- Infos générales -->
     <div class="section">
@@ -788,68 +781,32 @@
   <div class="section-title">Réseaux sociaux</div>
   <div class="social-list">
     <div class="social-row">
+      <button class="platform-toggle active" data-social="instagram" onclick="toggleSocial('instagram', this)">✓</button>
       <span class="social-label">Instagram</span>
-      <input 
-        type="url" 
-        id="s-instagram" 
-        placeholder="https://instagram.com/viqmusic"
-        value="https://www.instagram.com/viqmusic/"
-      />
+      <input type="url" id="s-instagram" placeholder="https://instagram.com/viqmusic" value="https://www.instagram.com/viqmusic/" oninput="schedulePreview()"/>
     </div>
 
     <div class="social-row">
+      <button class="platform-toggle active" data-social="tiktok" onclick="toggleSocial('tiktok', this)">✓</button>
       <span class="social-label">TikTok</span>
-      <input 
-        type="url" 
-        id="s-tiktok" 
-        placeholder="https://tiktok.com/@viqmusic"
-        value="https://www.tiktok.com/@viqmusic"
-      />
+      <input type="url" id="s-tiktok" placeholder="https://tiktok.com/@viqmusic" value="https://www.tiktok.com/@viqmusic" oninput="schedulePreview()"/>
     </div>
 
     <div class="social-row">
+      <button class="platform-toggle active" data-social="facebook" onclick="toggleSocial('facebook', this)">✓</button>
       <span class="social-label">Facebook</span>
-      <input 
-        type="url" 
-        id="s-facebook" 
-        placeholder="https://facebook.com/viqmusic"
-        value="https://www.facebook.com/Viqmusic"
-      />
+      <input type="url" id="s-facebook" placeholder="https://facebook.com/viqmusic" value="https://www.facebook.com/Viqmusic" oninput="schedulePreview()"/>
     </div>
 
     <div class="social-row">
+      <button class="platform-toggle active" data-social="website" onclick="toggleSocial('website', this)">✓</button>
       <span class="social-label">Site web</span>
-      <input 
-        type="url" 
-        id="s-website" 
-        placeholder="https://www.viqmusic.net" 
-        value="https://www.viqmusic.net"
-      />
+      <input type="url" id="s-website" placeholder="https://www.viqmusic.net" value="https://www.viqmusic.net" oninput="schedulePreview()"/>
     </div>
   </div>
 </div>
 
-    <!-- Posts generator -->
-    <div class="section" id="postsSection">
-      <div class="section-title">Promo posts</div>
-      <div style="display:flex;flex-direction:column;gap:.75rem;" id="postsList">
-
-<div class="post-block">
-          <div class="post-platform-label">TikTok</div>
-          <textarea class="post-textarea" id="post-tiktok" rows="3" spellcheck="false"></textarea>
-          <button class="post-copy-btn" onclick="copyPost('tiktok', this)">Copy</button>
-        </div>
-
-        <div class="post-block">
-          <div class="post-platform-label">Facebook / Instagram</div>
-          <textarea class="post-textarea" id="post-facebook" rows="5" spellcheck="false"></textarea>
-          <button class="post-copy-btn" onclick="copyPost('facebook', this)">Copy</button>
-        </div>
-
-      </div>
-    </div>
-
-    <button class="btn-generate" onclick="generate()">⚡ Générer la landing page</button>
+        <button class="btn-generate" onclick="generate()">⚡ Générer la landing page</button>
   </div>
 
   <!-- ════════════════════════════════════════════════════
@@ -944,7 +901,6 @@ let previewTimer = null;
 function schedulePreview(){
   clearTimeout(previewTimer);
   previewTimer = setTimeout(updatePreviewLive, 120);
-  generatePosts();
 }
 
 // ── Phone preview scaling (auto center + auto scale) ───────────────────────────
@@ -970,11 +926,93 @@ let generatedHTML = '';
 let generatedSlug = '';
 
 // ── Init platform list ────────────────────────────────────────────────────────
+// ── Toggle social ────────────────────────────────────────────────────────────
+function toggleSocial(id, btn) {
+  const input = document.getElementById('s-' + id);
+  const isActive = btn.classList.toggle('active');
+  btn.textContent = isActive ? '✓' : '+';
+  input.style.opacity = isActive ? '1' : '0.3';
+  input.style.pointerEvents = isActive ? 'auto' : 'none';
+  schedulePreview();
+}
+
+function getSocials() {
+  const ids = ['instagram', 'tiktok', 'facebook', 'website'];
+  const result = {};
+  ids.forEach(id => {
+    const btn = document.querySelector('[data-social="' + id + '"]');
+    const isActive = btn ? btn.classList.contains('active') : true;
+    result[id] = isActive ? document.getElementById('s-' + id).value.trim() : '';
+  });
+  return result;
+}
+
+// ── Open link preview ─────────────────────────────────────────────────────────
 function openLinkPreview(platformId) {
   const input = document.getElementById('link-' + platformId);
   const url = input ? input.value.trim() : '';
   if (!url || url === '#' || url === '') { alert('Aucun lien renseigné pour cette plateforme.'); return; }
   window.open(url, '_blank', 'noopener');
+}
+
+// ── Import landing page ───────────────────────────────────────────────────────
+function importLandingPage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(ev.target.result, 'text/html');
+
+      const titleEl = doc.querySelector('.cover-meta .artist');
+      const trackEl = doc.querySelector('.cover-meta .track');
+      const ogTitle = doc.querySelector('meta[property="og:title"]');
+      let artist = '', title = '', type = 'Single';
+
+      if (titleEl) { artist = titleEl.textContent.trim(); }
+      else if (ogTitle) { const p = ogTitle.content.split(' – '); if (p.length >= 2) { artist = p[0].trim(); title = p[1].trim(); } }
+      if (trackEl) { const p = trackEl.textContent.trim().split(' · '); title = p[0].trim(); if (p[1]) type = p[1].trim(); }
+
+      if (artist) document.getElementById('artist').value = artist;
+      if (title) { document.getElementById('title').value = title; updateSlug(); }
+      const typeEl = document.getElementById('type');
+      if (typeEl) { const opt = [...typeEl.options].find(o => o.value === type); if (opt) typeEl.value = type; }
+
+      doc.querySelectorAll('.link-row').forEach(row => {
+        const href = row.getAttribute('href');
+        if (!href || href === '#') return;
+        const nameEl = row.querySelector('.link-name');
+        if (!nameEl) return;
+        const label = nameEl.textContent.trim().toLowerCase().replace(/ +/g, '');
+        const match = PLATFORMS.find(p => p.label.toLowerCase().replace(/ +/g, '') === label || p.id === label);
+        if (match) { const input = document.getElementById('link-' + match.id); if (input) input.value = href; }
+      });
+
+      doc.querySelectorAll('.social-btn').forEach(btn => {
+        const href = btn.getAttribute('href');
+        if (!href) return;
+        const t = (btn.getAttribute('title') || '').toLowerCase();
+        if (t === 'instagram' || href.includes('instagram.com')) document.getElementById('s-instagram').value = href;
+        else if (t === 'tiktok' || href.includes('tiktok.com')) document.getElementById('s-tiktok').value = href;
+        else if (t === 'facebook' || href.includes('facebook.com')) document.getElementById('s-facebook').value = href;
+        else if (t === 'website' || href.includes('viqmusic')) document.getElementById('s-website').value = href;
+      });
+
+      const zone = document.getElementById('importZone');
+      zone.style.borderColor = 'var(--success)';
+      zone.querySelector('.import-text strong').textContent = '✓ Landing page importée !';
+      setTimeout(() => {
+        zone.style.borderColor = '';
+        zone.querySelector('.import-text strong').textContent = 'Importer une landing page';
+      }, 3000);
+      schedulePreview();
+    } catch(err) {
+      alert("Erreur import : assure-toi que c'est bien un index.html généré par cet outil.");
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
 }
 
 function initPlatforms() {
@@ -989,9 +1027,7 @@ row.innerHTML = `
   <span class="platform-name">${p.label}</span>
   <input type="url" id="link-${p.id}" placeholder="${placeholder}" oninput="schedulePreview()"/>
   <button class="btn-eye" onclick="openLinkPreview('${p.id}')" title="Ouvrir le lien">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-    </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
   </button>
 `;
 
@@ -1773,12 +1809,7 @@ async function updatePreviewLive(){
       return { platform: { id: p.id, url }, label: p.label, action: p.action, color: p.color, bg: p.bg };
     });
 
-  const socials = {
-    instagram: document.getElementById('s-instagram').value.trim(),
-    tiktok:    document.getElementById('s-tiktok').value.trim(),
-    facebook:  document.getElementById('s-facebook').value.trim(),
-    website:   document.getElementById('s-website').value.trim(),
-  };
+  const socials = getSocials();
 
   const slugVal = document.getElementById('slug').value.trim() || 'slug';
   const html = buildHTML(artist, title, type, coverSrc || 'cover.jpg', primary, orb2, darkBg, links, socials, slugVal);
@@ -1831,12 +1862,7 @@ async function generate() {
     });
 
   // Socials
-  const socials = {
-    instagram: document.getElementById('s-instagram').value.trim(),
-    tiktok:    document.getElementById('s-tiktok').value.trim(),
-    facebook:  document.getElementById('s-facebook').value.trim(),
-    website:   document.getElementById('s-website').value.trim(),
-  };
+  const socials = getSocials();
 
   // Build HTML
   generatedHTML = buildHTML(artist, title, type, coverSrc, primary, orb2, darkBg, links, socials, slug);
@@ -2325,44 +2351,7 @@ async function autofillLinks() {
 }
 
 // ── Promo posts ──────────────────────────────────────────────────────────────
-function generatePosts() {
-  const artist = (document.getElementById('artist').value || 'VIQ').trim();
-  const title  = (document.getElementById('title').value || '').trim();
-  const slug   = (document.getElementById('slug').value || '').trim();
-  const type   = (document.getElementById('type').value || 'single').toLowerCase();
-  const url    = slug ? 'https://go.viqmusic.net/' + slug : 'go.viqmusic.net/...';
 
-  if (!title) return;
-
-  const posts = {
-    tiktok:   `"${title}" out now 🔥 ${url}`,
-    facebook: `My new ${type} "${title}" is out now!\nListen now on Spotify, Apple Music and all streaming platforms.\n\nListen here : ${url}`,
-  };
-
-  for (const [platform, text] of Object.entries(posts)) {
-    const el = document.getElementById('post-' + platform);
-    if (el && !el.dataset.edited) el.value = text;
-  }
-}
-
-async function copyPost(platform, btn) {
-  const el = document.getElementById('post-' + platform);
-  if (!el || !el.value) return;
-  try {
-    await navigator.clipboard.writeText(el.value);
-  } catch(_) {
-    const ta = document.createElement('textarea');
-    ta.value = el.value;
-    ta.style.position = 'fixed'; ta.style.top = '-1000px';
-    document.body.appendChild(ta); ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-  }
-  const orig = btn.textContent;
-  btn.textContent = '✓ Copied!';
-  btn.classList.add('copied');
-  setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
-}
 
 // Marquer comme édité manuellement pour ne pas écraser
 ['tiktok','facebook'].forEach(p => {
