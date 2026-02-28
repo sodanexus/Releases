@@ -215,46 +215,6 @@
     .social-row input:focus { border-color: var(--accent); }
 
     /* ── Generate button ── */
-    .post-block {
-      position: relative;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: .75rem;
-    }
-    .post-platform-label {
-      font-size: .65rem;
-      font-family: var(--mono);
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: .5rem;
-    }
-    .post-textarea {
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: .78rem;
-      line-height: 1.6;
-      resize: vertical;
-      outline: none;
-    }
-    .post-copy-btn {
-      margin-top: .5rem;
-      padding: .35rem .8rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: .7rem;
-      cursor: pointer;
-      transition: all .2s;
-    }
-    .post-copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .post-copy-btn.copied { border-color: var(--success); color: var(--success); }
 
     .gradient-btn {
       padding: .5rem;
@@ -305,6 +265,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: .6rem;
       flex-shrink: 0;
     }
     .preview-header span {
@@ -329,21 +290,6 @@
       white-space: nowrap;
     }
     .btn-github:hover { border-color: rgba(255,255,255,0.25); background: var(--surface); }
-    .btn-download {
-      padding: .45rem 1rem;
-      background: var(--success);
-      color: #000;
-      border: none;
-      border-radius: 6px;
-      font-family: var(--mono);
-      font-size: .75rem;
-      font-weight: 400;
-      cursor: pointer;
-      transition: opacity .2s;
-      display: none;
-    }
-    .btn-download:hover { opacity: .85; }
-    .btn-download.visible { display: block; }
 
     .preview-frame-wrap {
       flex: 1;
@@ -489,82 +435,6 @@
       color: var(--muted);
     }
 
-    /* ── Duplicate btn ── */
-    .btn-duplicate {
-      width: 100%;
-      padding: .75rem;
-      background: var(--surface2);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-family: 'Syne', sans-serif;
-      font-size: .85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background .2s, border-color .2s;
-      margin-top: .75rem;
-      letter-spacing: .03em;
-    }
-    .btn-duplicate:hover { background: var(--surface); border-color: rgba(255,255,255,0.15); }
-
-    /* ── OG Preview ── */
-    .og-preview-wrap { padding: 1rem 1.5rem 1.25rem; border-top: 1px solid var(--border); flex-shrink: 0; }
-    .og-preview-label { font-size: .6rem; font-family: var(--mono); color: var(--muted); letter-spacing: .15em; text-transform: uppercase; margin-bottom: .6rem; }
-    .og-preview-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); display: none; aspect-ratio: 1200/630; object-fit: cover; }
-    .og-preview-img.visible { display: block; }
-    .og-placeholder { width: 100%; aspect-ratio: 1200/630; background: var(--surface2); border-radius: 8px; border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center; font-size: .7rem; font-family: var(--mono); color: var(--muted); }
-/* ── Cover actions ───────────────────────────────────────────── */
-.cover-actions{
-  display:flex;
-  gap:.5rem;
-  justify-content:center;
-  margin-top:.9rem;
-  display:none;
-}
-.cover-actions.visible{ display:flex; }
-.cover-actions button{
-  padding:.55rem .9rem;
-  background: var(--surface2);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-family: var(--mono);
-  font-size: .75rem;
-  cursor: pointer;
-  transition: background .2s, border-color .2s, opacity .2s;
-}
-.cover-actions button:hover{ background: var(--surface); border-color: rgba(255,255,255,0.15); }
-.cover-actions button.danger{ color: #ff6b6b; border-color: rgba(255,107,107,0.25); }
-.cover-actions button.danger:hover{ border-color: rgba(255,107,107,0.45); }
-
-/* ── URL validation indicator ───────────────────────────────── */
-.url-status{
-  width: 10px; height: 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.05);
-  display:inline-block;
-  margin-left:auto;
-  justify-self:end;
-  transition: transform .15s, opacity .15s, background .15s, border-color .15s;
-  opacity: .35;
-}
-.url-status.valid{
-  background: rgba(48,209,88,0.22);
-  border-color: rgba(48,209,88,0.55);
-  opacity: 1;
-}
-.url-status.invalid{
-  background: rgba(255,59,48,0.20);
-  border-color: rgba(255,59,48,0.55);
-  opacity: 1;
-}
-
-    /* ── Responsive ── */
-    @media (max-width: 900px) {
-      .app { grid-template-columns: 1fr; }
-      .panel-preview { display: none; }
-    }
       /* ── Mobile tweaks ── */
     .page{padding-bottom:calc(4rem + env(safe-area-inset-bottom));padding-top:calc(2rem + env(safe-area-inset-top));}
 
@@ -694,6 +564,41 @@
       display: inline-block;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── GitHub publish ── */
+    .btn-publish { padding:.45rem 1rem; background:var(--accent); color:white; border:none; border-radius:6px; font-family:var(--mono); font-size:.75rem; font-weight:600; cursor:pointer; transition:opacity .2s; white-space:nowrap; }
+    .btn-publish:hover { opacity:.85; }
+    .btn-publish:disabled { opacity:.5; cursor:not-allowed; }
+    .github-token-wrap { padding:.75rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:.5rem; flex-shrink:0; }
+    .github-token-wrap input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:var(--mono); font-size:.72rem; padding:.4rem .7rem; outline:none; transition:border-color .2s; }
+    .github-token-wrap input:focus { border-color:var(--accent); }
+    .github-token-wrap label { font-size:.65rem; font-family:var(--mono); color:var(--muted); white-space:nowrap; letter-spacing:.05em; }
+    .publish-status { font-size:.7rem; font-family:var(--mono); color:var(--muted); padding:.4rem 1.5rem; min-height:1.5rem; flex-shrink:0; }
+    .publish-status.ok { color:var(--success); }
+    .publish-status.err { color:#ff6b6b; }
+
+/* ── Cover actions ── */
+.cover-actions {
+  display: none;
+  gap: .5rem;
+  justify-content: center;
+  margin-top: .9rem;
+}
+.cover-actions.visible { display: flex; }
+.cover-actions button {
+  padding: .55rem .9rem;
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--mono);
+  font-size: .75rem;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.cover-actions button:hover { background: var(--surface); border-color: rgba(255,255,255,0.15); }
+.cover-actions button.danger { color: #ff6b6b; border-color: rgba(255,107,107,0.25); }
+.cover-actions button.danger:hover { border-color: rgba(255,107,107,0.45); }
 </style>
 </head>
 <body>
@@ -844,21 +749,24 @@
   </div>
 </div>
 
-        <div style="display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:stretch;">
-          <button class="btn-generate" onclick="generate()">⚡ Générer la landing page</button>
-          <button id="btnCopyHTML" onclick="copyHTML(this)" style="padding:1rem 1.25rem;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:var(--mono);font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;">⌘ Copier</button>
-        </div>
+        <button class="btn-generate" onclick="generate()">⚡ Générer la landing page</button>
   </div>
 
   <!-- ════════════════════════════════════════════════════
        RIGHT — PREVIEW
   ════════════════════════════════════════════════════ -->
   <div class="panel-preview">
+    <div class="github-token-wrap">
+      <label>TOKEN</label>
+      <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx" oninput="saveToken(this.value)" autocomplete="off"/>
+    </div>
     <div class="preview-header">
       <span>Aperçu live</span>
       <button id="btnFullscreen" onclick="toggleFullscreen()" style="padding:.35rem .8rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:.72rem;font-family:var(--mono);cursor:pointer;transition:all .2s;">⛶ Plein écran</button>
       <a href="https://github.com/sodanexus/releases/upload/main" target="_blank" rel="noopener" id="btnGithub" class="btn-github">↗ GitHub</a>
+      <button class="btn-publish" id="btnPublish" onclick="publishToGitHub()">⬆ Publier</button>
     </div>
+    <div class="publish-status" id="publishStatus"></div>
     <div class="preview-frame-wrap">
       <div id="previewEmpty" class="preview-empty">
         <span class="big">📱</span>
@@ -1085,58 +993,8 @@ row.innerHTML = `
   });
 }
 
-function isValidHttpUrl(value){
-  if (!value) return false;
-  try{
-    const u = new URL(value);
-    return u.protocol === 'http:' || u.protocol === 'https:';
-  }catch(_){
-    return false;
-  }
-}
 
-function setStatus(el, state){
-  if (!el) return;
-  el.classList.remove('valid','invalid');
-  if (state === 'valid') el.classList.add('valid');
-  if (state === 'invalid') el.classList.add('invalid');
-}
 
-function wireUrlValidation(){
-  // Platform inputs
-  PLATFORMS.forEach(p => {
-    const input = document.getElementById(`link-${p.id}`);
-    const dot = document.getElementById(`status-${p.id}`);
-    if (!input || !dot) return;
-
-input.addEventListener('blur', (e) => {
-  let val = e.target.value.trim();
-  if (!val) return;
-
-  // 1. Ajoute https:// si manquant
-  if (!/^https?:\/\//i.test(val)) val = 'https://' + val;
-
-  try {
-    const url = new URL(val);
-    // 2. Nettoyage des paramètres inutiles (utm, etc)
-    const paramsToClean = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'si'];
-    paramsToClean.forEach(p => url.searchParams.delete(p));
-    
-    e.target.value = url.toString();
-  } catch(err) { /* URL invalide, on laisse la validation normale gérer */ }
-});
-
-    const refresh = () => {
-      const v = (input.value || '').trim();
-      if (!v){ setStatus(dot, null); return; }
-      setStatus(dot, isValidHttpUrl(v) ? 'valid' : 'invalid');
-    };
-
-    input.addEventListener('input', refresh);
-    input.addEventListener('change', refresh);
-    refresh();
-  });
-}
 
 function togglePlatform(id, btn) {
   const input = document.getElementById(`link-${id}`);
@@ -1608,7 +1466,7 @@ function buildHTML(artist, title, type, coverSrc, primary, orb2, darkBg, links, 
     }
 
   </style>
-  <script defer src="https://cloud.umami.is/script.js" data-website-id="ae5f1f0e-fc4f-44e3-b721-d8bbd53694ef"/>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="ae5f1f0e-fc4f-44e3-b721-d8bbd53694ef"><\/script>
 </head>
 <body>
   <canvas id="particles-canvas"></canvas>
@@ -2040,20 +1898,6 @@ function fileToArrayBuffer(file) {
 }
 
 
-// ── Round rect helper ──────────────────────────────────────────────────────────
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
-}
 
 // ── Generate OG image 1200×630 JPEG ──────────────────────────────────────────
 async function generateOGImage(artist, title, type, coverSrc, primaryColor) {
@@ -2401,31 +2245,6 @@ async function autofillLinks() {
   if (el) el.addEventListener('input', () => { el.dataset.edited = '1'; });
 });
 
-// ── Copy HTML ────────────────────────────────────────────────────────────────
-async function copyHTML(btn) {
-  if (!generatedHTML) {
-    await buildLanding();
-  }
-  if (!generatedHTML) return;
-  try {
-    await navigator.clipboard.writeText(generatedHTML);
-  } catch(_) {
-    const ta = document.createElement('textarea');
-    ta.value = generatedHTML;
-    ta.style.position = 'fixed'; ta.style.top = '-1000px';
-    document.body.appendChild(ta); ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-  }
-  btn.textContent = '✓ Copié !';
-  btn.style.borderColor = 'var(--success)';
-  btn.style.color = 'var(--success)';
-  setTimeout(() => {
-    btn.textContent = '⌘ Copier';
-    btn.style.borderColor = '';
-    btn.style.color = '';
-  }, 2000);
-}
 
 // ── Gradient slider ──────────────────────────────────────────────────────────
 let gradientOpacity = 0.55;
@@ -2542,9 +2361,143 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
+// ── GitHub Direct Publish ─────────────────────────────────────────────────────
+const GITHUB_OWNER  = 'sodanexus';
+const GITHUB_REPO   = 'releases';
+const GITHUB_BRANCH = 'main';
+
+function saveToken(val) {
+  if (val) localStorage.setItem('viq_gh_token', val);
+  else localStorage.removeItem('viq_gh_token');
+}
+
+function loadToken() {
+  const token = localStorage.getItem('viq_gh_token');
+  const input = document.getElementById('githubToken');
+  if (token && input) input.value = token;
+  return token || '';
+}
+
+function setPublishStatus(msg, type) {
+  const el = document.getElementById('publishStatus');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'publish-status' + (type ? ' ' + type : '');
+}
+
+async function githubRequest(path, method, body) {
+  const token = localStorage.getItem('viq_gh_token');
+  if (!token) throw new Error('Token GitHub manquant');
+  const res = await fetch('https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + path, {
+    method,
+    headers: {
+      'Authorization': 'Bearer ' + token,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json',
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || 'Erreur GitHub ' + res.status);
+  }
+  return res.json();
+}
+
+async function getFileSHA(filePath) {
+  try {
+    const data = await githubRequest('/contents/' + filePath + '?ref=' + GITHUB_BRANCH, 'GET');
+    return data.sha || null;
+  } catch(_) {
+    return null;
+  }
+}
+
+async function pushFile(filePath, content, isBase64, sha) {
+  const body = {
+    message: 'Release: ' + generatedSlug,
+    branch: GITHUB_BRANCH,
+    content: isBase64 ? content : btoa(unescape(encodeURIComponent(content))),
+  };
+  if (sha) body.sha = sha;
+  return githubRequest('/contents/' + filePath, 'PUT', body);
+}
+
+async function publishToGitHub() {
+  setPublishStatus('Génération en cours…');
+  await buildLanding();
+  if (!generatedHTML || !generatedSlug) {
+    setPublishStatus("⚠ Remplis le titre et la pochette d'abord.", 'err');
+    return;
+  }
+  const token = localStorage.getItem('viq_gh_token');
+  if (!token) {
+    setPublishStatus("⚠ Entre ton token GitHub ci-dessus.", 'err');
+    document.getElementById('githubToken').focus();
+    return;
+  }
+
+  const btn = document.getElementById('btnPublish');
+  btn.disabled = true;
+  btn.textContent = '⏳ Publication…';
+
+  try {
+    const base = generatedSlug + '/';
+    setPublishStatus('Vérification des fichiers existants…');
+    const [htmlSHA, coverSHA, ogSHA] = await Promise.all([
+      getFileSHA(base + 'index.html'),
+      getFileSHA(base + 'cover.jpg'),
+      getFileSHA(base + 'og.jpg'),
+    ]);
+
+    setPublishStatus('Upload index.html…');
+    await pushFile(base + 'index.html', generatedHTML, false, htmlSHA);
+
+    if (coverFile) {
+      setPublishStatus('Upload cover.jpg…');
+      const coverB64 = await fileToBase64(coverFile);
+      await pushFile(base + 'cover.jpg', coverB64, true, coverSHA);
+    }
+
+    try {
+      setPublishStatus('Upload og.jpg…');
+      const artist  = document.getElementById('artist').value.trim() || 'VIQ';
+      const title   = document.getElementById('title').value.trim() || 'Track';
+      const type    = document.getElementById('type').value;
+      let   ogColor = '#ff6b1a';
+      if (coverDataURL) { try { ogColor = await extractColor(coverDataURL); } catch(_) {} }
+      const ogDataURL = await generateOGImage(artist, title, type, coverDataURL || null, ogColor);
+      const ogB64 = ogDataURL.split(',')[1];
+      await pushFile(base + 'og.jpg', ogB64, true, ogSHA);
+    } catch(e) { console.warn('OG upload skipped:', e); }
+
+    const url = 'https://go.viqmusic.net/' + generatedSlug;
+    setPublishStatus('✓ Publié → ' + url, 'ok');
+    btn.textContent = '✓ Publié !';
+    setTimeout(() => { btn.textContent = '⬆ Publier'; btn.disabled = false; }, 3000);
+
+  } catch(err) {
+    console.error(err);
+    setPublishStatus('✗ ' + err.message, 'err');
+    btn.textContent = '⬆ Publier';
+    btn.disabled = false;
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result.split(',')[1]);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
+loadToken();
 initPlatforms();
-wireUrlValidation();
 restoreDuplicateCfg();
 wireLivePreview();
 wireCoverDrop();
