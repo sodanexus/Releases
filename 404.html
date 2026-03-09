@@ -7,18 +7,12 @@
   <meta name="robots" content="noindex, nofollow"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/jpeg" href="cover.jpg"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{--primary:#ffae00;--card-bg:rgba(0,0,0,0.92);--text:#f5f0eb;--muted:rgba(245,240,235,0.75);}
     html,body{min-height:100%;font-family:'Inter',sans-serif;background:#000;color:var(--text);overflow-x:hidden;}
 
     #particles-canvas{position:fixed;inset:0;z-index:2;pointer-events:none;}
-
-    .bg-cover{position:fixed;inset:0;z-index:0;overflow:hidden;}
-    .bg-cover img{width:110%;height:110%;object-fit:cover;position:absolute;top:-5%;left:-5%;
-      filter:blur(80px) saturate(130%) brightness(0.85);transform:scale(1.2);}
-    .bg-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);}
 
     .page{
       position:relative;z-index:1;
@@ -143,11 +137,6 @@
 <body>
 
   <canvas id="particles-canvas"></canvas>
-  <div class="bg-cover">
-    <img src="cover.jpg" alt=""/>
-    <div class="bg-overlay"></div>
-  </div>
-
   <div class="page">
     <div class="card">
       <div class="error-code">404</div>
