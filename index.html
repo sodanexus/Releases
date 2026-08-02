@@ -21,6 +21,7 @@
   <meta name="twitter:image" content="https://go.viqmusic.net/og.jpg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="preload" href="cover.jpg" as="image" fetchpriority="high"/>
   <link rel="icon" type="image/jpeg" href="cover.jpg"/>
   <link rel="apple-touch-icon" href="cover.jpg"/>
   
@@ -139,11 +140,11 @@
 </head>
 <body>
   <canvas id="particles-canvas"></canvas>
-  <div class="bg-cover"><img src="cover.jpg" alt=""><div class="bg-overlay"></div></div>
+  <div class="bg-cover"><img src="cover.jpg" alt="" fetchpriority="high" decoding="async"><div class="bg-overlay"></div></div>
   <div class="page">
     <div class="card">
       <div class="cover-wrap">
-        <img class="cover" src="cover.jpg" alt="VIQ"/>
+        <img class="cover" src="cover.jpg" alt="VIQ" fetchpriority="high" decoding="async"/>
         <div class="cover-gradient"></div>
         <div class="cover-meta">
           <div class="artist" style="font-size:1.8rem;letter-spacing:0.02em;word-break:break-word;white-space:normal;padding:0 .75rem;">VIQ</div>
