@@ -20,14 +20,14 @@
   <meta name="twitter:description" content="Listen to Enough For Me by Eagle Eyed Tiger & VIQ on Spotify, Apple Music, YouTube and more. Stream now."/>
   <meta name="twitter:image" content="https://go.viqmusic.net/enough-for-me/og.jpg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
   <link rel="icon" type="image/jpeg" href="cover.jpg"/>
   <link rel="apple-touch-icon" href="cover.jpg"/>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="ae5f1f0e-fc4f-44e3-b721-d8bbd53694ef"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{--primary:#d848a8;--card-bg: rgba(0,0,0,0.92);--text:#f5f0eb;--muted: rgba(245,240,235,0.75);}
-    html,body{min-height:100%;font-family:'Inter',sans-serif;background:#000;color:var(--text);overflow-x:hidden;}
+    html,body{min-height:100%;font-family:"Archivo", "Helvetica Neue", Arial, sans-serif;background:#000;color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 
     #particles-canvas {
       position: fixed;
@@ -51,10 +51,11 @@
     .cover-gradient{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 45%,rgba(0,0,0,0.30) 100%);}
     .cover-meta{position:absolute;bottom:1.25rem;left:0;right:0;text-align:center;}
     .cover-meta .artist{
-      font-family:'Playfair Display', serif;
-      font-weight:700;
+      font-weight:800;
+      font-stretch:112%;
       font-size:1.8rem;
-      letter-spacing:0.02em;
+      line-height:1.02;
+      letter-spacing:-.04em;
     }
     .cover-meta .track{font-size:.82rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-top:.15rem;}
     .links-list{padding:.5rem 0 1rem;display:flex;flex-direction:column;}
@@ -119,7 +120,7 @@
   cursor:pointer;
   transition:background .2s,color .2s,border-color .2s;
   text-transform:uppercase;
-  font-family:'Inter',sans-serif;
+  font-family:"Archivo", "Helvetica Neue", Arial, sans-serif;
 }
 .copy-link-btn:hover{background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.2);}
 .copy-link-btn.copied{background:rgba(48,209,88,0.15);color:#30d158;border-color:rgba(48,209,88,0.3);}
@@ -154,7 +155,7 @@
         <img class="cover" src="cover.jpg" alt="Enough For Me cover"/>
         <div class="cover-gradient"></div>
         <div class="cover-meta">
-          <div class="artist" style="font-size:1.55rem;letter-spacing:0em;word-break:break-word;white-space:normal;padding:0 .75rem;">Eagle Eyed Tiger & VIQ</div>
+          <div class="artist" style="font-size:1.55rem;letter-spacing:-0.045em;word-break:break-word;white-space:normal;padding:0 .75rem;">Eagle Eyed Tiger & VIQ</div>
           <div class="track">Enough For Me · Single</div>
         </div>
       </div>
