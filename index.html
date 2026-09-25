@@ -118,14 +118,11 @@
 .copy-link-btn.copied{background:rgba(48,209,88,0.15);color:#30d158;border-color:rgba(48,209,88,0.3);}
 .copy-link-btn svg{width:14px;height:14px;flex-shrink:0;}
 .legal-footer{
-      position:fixed;
-      bottom:calc(14px + env(safe-area-inset-bottom));
-      left:50%;
-      transform:translateX(-50%);
+      margin-top:1.75rem;
+      padding-bottom:calc(0.5rem + env(safe-area-inset-bottom));
       font-size:11px;
-      color:rgba(255,255,255,0.45);
+      color:rgba(255,255,255,0.4);
       text-align:center;
-      z-index:20;
     }
     .legal-footer a{
       color:rgba(255,255,255,0.55);
@@ -247,11 +244,10 @@
         </button>
       </div>
     </div>
-  </div>
-
-<div class="legal-footer">
-    <a href="/mentions.html">Legal Notice</a> · 
-    <a href="/privacy.html">Privacy Policy</a>
+    <div class="legal-footer">
+      <a href="/mentions.html">Legal Notice</a> · 
+      <a href="/privacy.html">Privacy Policy</a>
+    </div>
   </div>
 
 <script>
